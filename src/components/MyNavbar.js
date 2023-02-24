@@ -7,7 +7,6 @@ import {
   Divider,
   Alert,
 } from "@mantine/core";
-
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
 import { buttonStyles } from "@component/styles/customStyles";
@@ -16,8 +15,8 @@ import {
   ADMIN_MENU,
   SUPER_ADMIN_MENU,
 } from "@component/constants/menu";
-import { useToggle } from "@mantine/hooks";
 import { IconAlertCircle } from "@tabler/icons";
+import { useStateContext } from "@component/context";
 
 const CreateMenu = ({ item }) => (
   <UnstyledButton sx={buttonStyles} component={Link} href={item.href}>
@@ -31,7 +30,7 @@ const CreateMenu = ({ item }) => (
 );
 
 export default function MyNavbar({ opened }) {
-  const [alert, toogleAlert] = useToggle([true, false]);
+  const { isMismatched } = useStateContext();
   return (
     <Navbar
       p="md"
@@ -56,7 +55,7 @@ export default function MyNavbar({ opened }) {
           <CreateMenu item={item} key={index} />
         ))}
       </Navbar.Section>
-      {alert && (
+      {isMismatched && (
         <>
           <Divider my="sm" />
           <Navbar.Section>
@@ -64,11 +63,9 @@ export default function MyNavbar({ opened }) {
               color="red"
               title="!Warning"
               icon={<IconAlertCircle size={16} />}
-              withCloseButton
-              onClose={() => toogleAlert()}
             >
-              Please switch to a supported chain. The supported Chain Ids are:
-              1337 and 3117
+              Please switch to a supported chain. The supported Chain Id is:
+              1337
             </Alert>
           </Navbar.Section>
         </>

@@ -1,25 +1,30 @@
-import Jazzicon from "react-jazzicon";
+import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 import { Button, Text, ThemeIcon, UnstyledButton, Group } from "@mantine/core";
 import { IconWallet } from "@tabler/icons";
 import { buttonStyles } from "@component/styles/customStyles";
+import { useStateContext } from "@component/context";
 
 export default function ConnectWallet() {
-  const connected = false;
-  const address = "0x1111111111111111111111111111111111111111";
+  const { address, isLoading, connectWallet, disconnectWallet } =
+    useStateContext();
+
   return (
     <>
-      {connected ? (
-        <Button leftIcon={<IconWallet size={16} />} fullWidth size="xl">
+      {!address ? (
+        <Button
+          leftIcon={<IconWallet size={16} />}
+          fullWidth
+          size="lg"
+          onClick={connectWallet}
+          loading={isLoading}
+        >
           Connect Wallet
         </Button>
       ) : (
-        <UnstyledButton sx={buttonStyles}>
+        <UnstyledButton sx={buttonStyles} onClick={disconnectWallet}>
           <Group>
             <ThemeIcon variant="light" radius="xl" size="xl">
-              <Jazzicon
-                diameter={35}
-                seed={Math.round(Math.random() * 10000000)}
-              />
+              <Jazzicon diameter={35} seed={jsNumberForAddress(address)} />
             </ThemeIcon>
             <Text fw={700} truncate>
               {address.slice(0, 6)}....
